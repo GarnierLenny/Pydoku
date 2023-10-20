@@ -1,5 +1,9 @@
 
 import copy
+import time
+import sys
+
+global board
 
 def check_hor(board, x, y):
   for j in range(9):
@@ -48,29 +52,42 @@ def is_solved(board):
             return False
   return True
 
-solved_board = [
-  [5, 3, 8, 7, 6, 9, 4, 1, 2],
-  [6, 9, 7, 1, 4, 2, 8, 3, 5],
-  [1, 2, 4, 8, 3, 5, 7, 6, 9],
-  [8, 6, 3, 4, 2, 7, 9, 5, 1],
-  [9, 7, 1, 5, 8, 3, 6, 2, 4],
-  [4, 5, 2, 6, 9, 1, 3, 8, 7],
-  [7, 1, 9, 3, 5, 8, 2, 4, 6],
-  [2, 8, 6, 9, 7, 4, 5, 3, 1],
-  [3, 4, 5, 2, 1, 6, 8, 7, 9]
-]
+def is_num(c):
+  if c >= '0' and c <= '9':
+      return True
+  return False
 
-board = [
-  [0, 0, 0, 5, 7, 3, 0, 0, 2],
-  [0, 0, 7, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 2, 9, 1, 3, 6, 0],
-  [0, 6, 0, 4, 2, 5, 1, 8, 0],
-  [0, 1, 0, 0, 0, 0, 0, 5, 0],
-  [0, 8, 4, 1, 6, 9, 0, 2, 0],
-  [0, 4, 1, 6, 5, 7, 0, 0, 0],
-  [6, 0, 0, 0, 0, 0, 4, 0, 0],
-  [8, 0, 0, 9, 1, 4, 0, 0, 0]
-]
+def map_checker(file_map):
+  for i in range(0, 80, 2):
+    if is_num(file_map[i]) == False or (file_map[i + 1] != ' ' and file_map[i + 1] != '\n'):
+      return False
+  return True
 
-if rec(board, 0, 0) == False:
-  print("Invalid sudoku map")
+if (len(sys.argv) != 1):
+  board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ]
+  f = open(sys.argv[1], "r")
+  file_map = f.read()
+  if map_checker(file_map) == False:
+    print("Passed map is invalid")
+  else:
+    k = 0
+    for i in range(9):
+      for j in range(9):
+        board[i][j] = int(file_map[k])
+        k += 2
+    rec(board, 0, 0)
+    for line in board:
+      print(line)
+
+# if rec(board, 0, 0) == False:
+#   print("Invalid sudoku map")

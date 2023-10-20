@@ -1,17 +1,18 @@
 import pygame
 import copy
-from sudoku_solver import rec
+from sudoku_solver import rec, map_checker, is_num
+import sys
 
 board = [
-  [0, 0, 0, 5, 7, 3, 0, 0, 2],
-  [0, 0, 7, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 2, 9, 1, 3, 6, 0],
-  [0, 6, 0, 4, 2, 5, 1, 8, 0],
-  [0, 1, 0, 0, 0, 0, 0, 5, 0],
-  [0, 8, 4, 1, 6, 9, 0, 2, 0],
-  [0, 4, 1, 6, 5, 7, 0, 0, 0],
-  [6, 0, 0, 0, 0, 0, 4, 0, 0],
-  [8, 0, 0, 9, 1, 4, 0, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
 board_reference = [
@@ -143,6 +144,19 @@ def init():
       clock.tick(60)
 
   pygame.quit()
+
+if (len(sys.argv) == 1):
+  f = open(sys.argv[1], "r")
+else:
+  f = open("map", "r")
+  file_map = f.read()
+  map_checker(file_map)
+
+k = 0
+for i in range(9):
+  for j in range(9):
+    board[i][j] = int(file_map[k])
+    k += 2
 
 setup_reference()
 init()
