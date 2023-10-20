@@ -1,4 +1,4 @@
-# Sudokupy
+# Pydoku
 
 This is a playable sudoku game made with python
 
