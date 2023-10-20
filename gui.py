@@ -94,10 +94,14 @@ def reset():
       if board_reference[i][j] == 0:
         board[i][j] = 0
 
+def solve():
+  reset()
+  rec(board, 0, 0)
+
 def print_square(board, square_x, square_y, x, y):
 
-  button((570, 320), (200, 50), 'Solve', (45, 2), lambda: rec(board, 0, 0), 3)
-  button((570, 420), (200, 50), 'Reset', (45, 2), reset, 3)
+  button((570, 250), (200, 50), 'Solve', (45, 2), solve, 3)
+  button((570, 350), (200, 50), 'Reset', (45, 2), reset, 3)
 
   screen.blit(my_font.render('SUDOKU', False, (255, 255, 255)), (195, 10))
   for i in range(3):
