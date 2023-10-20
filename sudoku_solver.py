@@ -1,8 +1,5 @@
 
-import copy
-import time
-import sys
-
+import copy, time, sys, logging
 global board
 
 def check_hor(board, x, y):
@@ -21,7 +18,7 @@ def check_ver(board, x, y):
         return True
   return False
 
-def rec(board, x, y):
+def recursive_solve(board, x, y):
   if x == 9:
     x = 0
     y += 1
@@ -36,8 +33,8 @@ def rec(board, x, y):
       return True
   for i in range(9):
     board[y][x] += 1
-    if check_hor(board, x, y) == True and check_ver(board, x, y) == True:
-      if rec(board, x + 1, y) == True:
+    if check_hor(board, x, y) is True and check_ver(board, x, y) is True:
+      if recursive_solve(board, x + 1, y) is True:
         return True
   board[y][x] = 0
   return False
@@ -53,17 +50,33 @@ def is_solved(board):
   return True
 
 def is_num(c):
-  if c >= '0' and c <= '9':
+  try:
+    value = int(c)
+    if value >= 0 and value <= 9:
       return True
-  return False
+  except:
+    return False
 
-def map_checker(file_map):
-  for i in range(0, 80, 2):
-    if is_num(file_map[i]) == False or (file_map[i + 1] != ' ' and file_map[i + 1] != '\n'):
-      return False
-  return True
+def get_map():
+  if (len(sys.argv) > 1):
+    return sys.argv[1]
+  return "map"
 
-if (len(sys.argv) != 1):
+def solve():
+  k = 0
+  for i in range(9):
+    for j in range(9):
+      try:
+        board[i][j] = int(file_map[k])
+        k += 2
+      except:
+        logging.error("Invalid map format")
+        exit()
+  recursive_solve(board, 0, 0)
+  for line in board:
+    print(line)
+
+if (sys.argv[0] == "sudoku_solver.py"):
   board = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -75,19 +88,6 @@ if (len(sys.argv) != 1):
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0]
   ]
-  f = open(sys.argv[1], "r")
-  file_map = f.read()
-  if map_checker(file_map) == False:
-    print("Passed map is invalid")
-  else:
-    k = 0
-    for i in range(9):
-      for j in range(9):
-        board[i][j] = int(file_map[k])
-        k += 2
-    rec(board, 0, 0)
-    for line in board:
-      print(line)
-
-# if rec(board, 0, 0) == False:
-#   print("Invalid sudoku map")
+  with open(get_map(), "r") as f:
+    file_map = f.read()
+    solve()
