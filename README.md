@@ -32,6 +32,6 @@ Two buttons are on the interface, "Solve" and "Reset":
 
 ## Note
 
-As of today (20th October) this project is kind of a draft so I plan on improving it along my python journey so stay tuned !
+As of today (October 20th 2023) this project is kind of a draft so I plan on improving it along my python journey so stay tuned !
 
 If you see something that is bad practice or simply wrong in my code feel free to contact me I'd be happy to exchange with you :)
