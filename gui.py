@@ -1,5 +1,6 @@
 import pygame, copy, sys, logging
-from sudoku_solver import recursive_solve, is_num, get_map
+from sudoku_solver import is_num, get_map, check_hor, check_ver
+import time
 
 running = True
 screen = 0
@@ -91,6 +92,7 @@ def reset():
 
 def solve():
   reset()
+  # need to get the updated board to display
   recursive_solve(board, 0, 0)
 
 def print_square(board, square_x, square_y, x, y):
@@ -110,6 +112,46 @@ def print_square(board, square_x, square_y, x, y):
       ref += 55
     y += 55
 
+def display_board():
+  screen.blit(my_font.render('SUDOKU', False, (255, 255, 255)), (195, 10))
+  y = 60
+  for i in range(3):
+    x = 20
+    for j in range(3):
+      print_square(board, j, i, x, y)
+      x += 55 * 3 + 10
+    y += 55 * 3 + 10
+
+def recursive_solve(board, x, y):
+  if x == 9:
+    x = 0
+    y += 1
+  if y == 9:
+    return True
+  while board[y][x] != 0:
+    x += 1
+    if x == 9:
+      x = 0
+      y += 1
+    if y == 9:
+      return True
+  for i in range(9):
+    board[y][x] += 1
+    if check_hor(board, x, y) is True and check_ver(board, x, y) is True:
+      display_board()
+      time.sleep(0.05)
+      display_game()
+      if recursive_solve(board, x + 1, y) is True:
+        return True
+  board[y][x] = 0
+  return False
+
+def display_game():
+  pygame.display.flip()
+  screen.fill("black")
+  clock.tick(60)
+
+
 def game_loop():
   global running
 
@@ -117,27 +159,16 @@ def game_loop():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    screen.fill("black")
-
-    y = 60
-    for i in range(3):
-      x = 20
-      for j in range(3):
-        print_square(board, j, i, x, y)
-        x += 55 * 3 + 10
-      y += 55 * 3 + 10
 
     display_buttons()
-    pygame.display.flip()
-
-    clock.tick(60)
+    display_board()
+    display_game()
 
 def exit_game():
   global running
   running = False
 
 def display_buttons():
-  screen.blit(my_font.render('SUDOKU', False, (255, 255, 255)), (195, 10))
   button((570, 200), (200, 50), 'Solve', (45, 2), solve, 3)
   button((570, 300), (200, 50), 'Reset', (45, 2), reset, 3)
   button((570, 400), (200, 50), 'Exit', (65, 2), exit_game, 3)
