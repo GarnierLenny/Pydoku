@@ -92,7 +92,6 @@ def reset():
 
 def solve():
   reset()
-  # need to get the updated board to display
   recursive_solve(board, 0, 0)
 
 def print_square(board, square_x, square_y, x, y):
@@ -122,6 +121,21 @@ def display_board():
       x += 55 * 3 + 10
     y += 55 * 3 + 10
 
+def get_highlight_position(x, y):
+  y_pos = (y + 1) * 60 - 5 * y
+  y_pos += 10 if y >= 3 else 0
+  y_pos += 10 if y >= 6 else 0
+  x_pos = x * 60 + 20 - (5 * x)
+  x_pos += 10 if x >= 3 else 0
+  x_pos += 10 if x >= 6 else 0
+  return x_pos + 4, y_pos + 4
+
+def highlight_cell(x, y, cell_color, value_color):
+  pos = get_highlight_position(x, y)
+  pygame.draw.rect(screen, cell_color, (pos[0], pos[1], 52, 52))
+  screen.blit(my_font.render(str(board[y][x]), False, value_color), (pos[0] + 15, pos[1] + 4))
+  time.sleep(0.4)
+
 def recursive_solve(board, x, y):
   if x == 9:
     x = 0
@@ -139,14 +153,14 @@ def recursive_solve(board, x, y):
     board[y][x] += 1
     if check_hor(board, x, y) is True and check_ver(board, x, y) is True:
       display_board()
-      time.sleep(0.05)
-      display_game()
+      highlight_cell(x, y, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
+      refresh_screen()
       if recursive_solve(board, x + 1, y) is True:
         return True
   board[y][x] = 0
   return False
 
-def display_game():
+def refresh_screen():
   pygame.display.flip()
   screen.fill("black")
   clock.tick(60)
@@ -159,10 +173,9 @@ def game_loop():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     display_buttons()
     display_board()
-    display_game()
+    refresh_screen()
 
 def exit_game():
   global running

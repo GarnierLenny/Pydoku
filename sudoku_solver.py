@@ -31,17 +31,12 @@ def recursive_solve(board, x, y):
       y += 1
     if y == 9:
       return True
-  # this section of the code needs to be extracted so that gui can call it every loop, return updated version of the board
   for i in range(9):
     board[y][x] += 1
     if check_hor(board, x, y) is True and check_ver(board, x, y) is True:
-      for line in board:
-        print(line)
-      print()
       if recursive_solve(board, x + 1, y) is True:
         return True
   board[y][x] = 0
-  # to here
   return False
 
 def is_solved(board):
