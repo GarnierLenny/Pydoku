@@ -18,6 +18,31 @@ def check_ver(board, x, y):
         return True
   return False
 
+def get_square_pos(x, y):
+  pos_x = 0
+  pos_y = 0
+  if x > 2 and x <= 5:
+    pos_x = 3
+  elif x > 5:
+    pos_x = 6
+  if y > 2 and y <= 5:
+    pos_y = 3
+  elif y > 5:
+    pos_y = 6
+  return pos_x, pos_y
+
+def check_square(board, x, y):
+  pos = get_square_pos(x, y)
+  for i in range(3):
+    if y == pos[1] + i:
+      continue
+    for j in range(3):
+      if x == pos[0] + j:
+        continue
+      if board[y][x] == board[pos[1] + i][pos[0] + j]:
+        return False
+  return True
+
 def recursive_solve(board, x, y):
   if x == 9:
     x = 0
@@ -33,7 +58,7 @@ def recursive_solve(board, x, y):
       return True
   for i in range(9):
     board[y][x] += 1
-    if check_hor(board, x, y) is True and check_ver(board, x, y) is True:
+    if check_hor(board, x, y) is True and check_ver(board, x, y) is True and check_square(board, x, y) is True:
       if recursive_solve(board, x + 1, y) is True:
         return True
   board[y][x] = 0

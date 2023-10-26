@@ -1,5 +1,5 @@
 import pygame, copy, sys, logging
-from sudoku_solver import is_num, get_map, check_hor, check_ver
+from sudoku_solver import is_num, get_map, check_hor, check_ver, check_square
 import time
 
 running = True
@@ -134,7 +134,7 @@ def highlight_cell(x, y, cell_color, value_color):
   pos = get_highlight_position(x, y)
   pygame.draw.rect(screen, cell_color, (pos[0], pos[1], 52, 52))
   screen.blit(my_font.render(str(board[y][x]), False, value_color), (pos[0] + 15, pos[1] + 4))
-  time.sleep(0.4)
+  time.sleep(0.5)
 
 def recursive_solve(board, x, y):
   if x == 9:
@@ -151,7 +151,7 @@ def recursive_solve(board, x, y):
       return True
   for i in range(9):
     board[y][x] += 1
-    if check_hor(board, x, y) is True and check_ver(board, x, y) is True:
+    if check_hor(board, x, y) is True and check_ver(board, x, y) is True and check_square(board, x, y) is True:
       display_board()
       highlight_cell(x, y, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
       refresh_screen()
