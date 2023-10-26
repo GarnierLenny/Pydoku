@@ -1,71 +1,14 @@
 import pygame, copy, sys, logging
 from sudoku_solver import is_num, get_map, check_hor, check_ver, check_square
 import time
-
-running = True
-screen = 0
-clock = 0
-click_lock = False
-pygame.font.init()
-my_font = pygame.font.SysFont('sans', 40)
-board = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
-board_reference = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
+from components.display_board import display_board
+from pygame_init import *
 
 def setup_reference():
   for i in range(9):
     for j in range(9):
       if board[i][j] != 0:
         board_reference[i][j] = 1
-
-def set_cell_value(x, y):
-  keys = pygame.key.get_pressed()
-  if keys[pygame.K_0] or keys[pygame.K_BACKSPACE]:
-    board[y][x] = 0
-  elif keys[pygame.K_1]:
-    board[y][x] = 1
-  elif keys[pygame.K_2]:
-    board[y][x] = 2
-  elif keys[pygame.K_3]:
-    board[y][x] = 3
-  elif keys[pygame.K_4]:
-    board[y][x] = 4
-  elif keys[pygame.K_5]:
-    board[y][x] = 5
-  elif keys[pygame.K_6]:
-    board[y][x] = 6
-  elif keys[pygame.K_7]:
-    board[y][x] = 7
-  elif keys[pygame.K_8]:
-    board[y][x] = 8
-  elif keys[pygame.K_9]:
-    board[y][x] = 9
-
-def print_cell_value(value, hover_check, ref, y):
-  if value != 0:
-    if hover_check == 1:
-      screen.blit(my_font.render(str(value), False, (0, 0, 0)), (ref + 20, y + 7))
-    else:
-      screen.blit(my_font.render(str(value), False, (255, 255, 255)), (ref + 20, y + 7))
 
 def button(pos, dim, text, text_offset, fun, width):
   mouse_pos = pygame.mouse.get_pos()
@@ -94,33 +37,6 @@ def solve():
   reset()
   recursive_solve(board, 0, 0)
 
-def print_square(board, square_x, square_y, x, y):
-  for i in range(3):
-    ref = copy.copy(x)
-    for j in range(3):
-      hover_check = 0
-      pos = pygame.mouse.get_pos()
-      if (pos[0] > ref + 5 and pos[0] < ref + 55) and (pos[1] > y + 5 and pos[1] < y + 55) and board_reference[i + 3 * square_y][j + 3 * square_x] == 0:
-        pygame.draw.rect(screen, pygame.Color(255, 255, 255), (ref, y, 60, 60))
-        hover_check = 1
-        set_cell_value(j + 3 * square_x, i + 3 * square_y)
-      else:
-        pygame.draw.rect(screen, pygame.Color(255, 255, 255), (ref, y, 60, 60), 4)
-        hover_check = 0
-      print_cell_value(board[i + 3 * square_y][j + 3 * square_x], hover_check, ref, y)
-      ref += 55
-    y += 55
-
-def display_board():
-  screen.blit(my_font.render('SUDOKU', False, (255, 255, 255)), (195, 10))
-  y = 60
-  for i in range(3):
-    x = 20
-    for j in range(3):
-      print_square(board, j, i, x, y)
-      x += 55 * 3 + 10
-    y += 55 * 3 + 10
-
 def get_highlight_position(x, y):
   y_pos = (y + 1) * 60 - 5 * y
   y_pos += 10 if y >= 3 else 0
@@ -134,7 +50,7 @@ def highlight_cell(x, y, cell_color, value_color):
   pos = get_highlight_position(x, y)
   pygame.draw.rect(screen, cell_color, (pos[0], pos[1], 52, 52))
   screen.blit(my_font.render(str(board[y][x]), False, value_color), (pos[0] + 15, pos[1] + 4))
-  time.sleep(0.5)
+  time.sleep(0.2)
 
 def recursive_solve(board, x, y):
   if x == 9:
@@ -194,8 +110,6 @@ def init():
   setup_reference()
 
   pygame.init()
-  screen = pygame.display.set_mode((800, 600))
-  clock = pygame.time.Clock()
 
   game_loop()
   pygame.quit()
