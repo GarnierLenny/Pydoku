@@ -2,22 +2,22 @@
 
 This is a playable sudoku game made with python
 
-Originally I intended to only make a solver but I thought that it would be more appreciable with an graphical user interface.
+Originally I intended to only make a solver but I thought that it would be more appreciable with a graphical interface.
 
 ## Installation
 
 ```bash
-  python -m pip install -U pygame==2.5.2 --user
+  ./install.sh
 ```
 
 ## Usage
 
 ```bash
-// to only run the solver
-python3 sudoku_solver.py [file_map path]
+./start.sh
 
-// to run the game
-python3 gui.py [file_map path]
+// or if you just want to run the solver and not the GUI
+
+python3 sudoku_solver.py [map_file]
 ```
 
 ## In game

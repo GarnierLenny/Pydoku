@@ -1,6 +1,7 @@
 import pygame
 import time, copy
 from pygame_init import *
+import pygame_init
 
 def set_cell_value(x, y):
   keys = pygame.key.get_pressed()
@@ -36,13 +37,14 @@ def print_cell_value(value, hover_check, ref, y):
 
 def print_square(square_x, square_y, x, y):
   global board
+  global solving
 
   for i in range(3):
     ref = copy.copy(x)
     for j in range(3):
       hover_check = 0
       pos = pygame.mouse.get_pos()
-      if (pos[0] > ref + 5 and pos[0] < ref + 55) and (pos[1] > y + 5 and pos[1] < y + 55) and board_reference[i + 3 * square_y][j + 3 * square_x] == 0:
+      if (pos[0] > ref + 5 and pos[0] < ref + 55) and (pos[1] > y + 5 and pos[1] < y + 55) and board_reference[i + 3 * square_y][j + 3 * square_x] == 0 and pygame_init.solving is False:
         pygame.draw.rect(screen, pygame.Color(255, 255, 255), (ref, y, 60, 60))
         hover_check = 1
         set_cell_value(j + 3 * square_x, i + 3 * square_y)

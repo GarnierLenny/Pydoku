@@ -5,6 +5,7 @@ screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 click_lock = False
 pygame.font.init()
+solving = False
 my_font = pygame.font.SysFont('sans', 40)
 board = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],

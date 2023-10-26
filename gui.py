@@ -3,6 +3,9 @@ from sudoku_solver import is_num, get_map, check_hor, check_ver, check_square
 import time
 from components.display_board import display_board
 from pygame_init import *
+import pygame_init
+
+global solving
 
 def setup_reference():
   for i in range(9):
@@ -35,6 +38,8 @@ def reset():
 
 def solve():
   reset()
+  pygame_init.solving = True
+  print(pygame_init.solving)
   recursive_solve(board, 0, 0)
 
 def get_highlight_position(x, y):
@@ -65,11 +70,16 @@ def recursive_solve(board, x, y):
       y += 1
     if y == 9:
       return True
+  for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
   for i in range(9):
     board[y][x] += 1
     if check_hor(board, x, y) is True and check_ver(board, x, y) is True and check_square(board, x, y) is True:
       display_board()
-      highlight_cell(x, y, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
+
+      highlight_cell(x, y, pygame.Color(255, 255, 255), pygame.Color(0, 200, 0))
+
       refresh_screen()
       if recursive_solve(board, x + 1, y) is True:
         return True
